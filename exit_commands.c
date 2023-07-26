@@ -107,9 +107,9 @@ while ((path_token = strtok(path_env, ":")) != NULL)
 path_len = custom_strlen(path_token);
 command_len = custom_strlen(command);
 /* Construct the full path of the command */
-custom_memcpy(command_path, path_token, path_len);
+my_memcpy(command_path, path_token, path_len);
 command_path[path_len] = '/';
-custom_memcpy(command_path + path_len + 1, command, command_len);
+my_memcpy(command_path + path_len + 1, command, command_len);
 command_path[path_len + command_len + 1] = '\0';
 
 execve(command_path, arg_list, environ);
@@ -175,7 +175,7 @@ index++;
 /*Conversion of digits to integer value*/
 while (str[index] >= '0' && str[index] <= '9')
 {
-result = (output * 10) + (str[index] - '0');
+output = (output * 10) + (str[index] - '0');
 index++;
 }
 return (sign *output);
