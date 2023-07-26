@@ -80,15 +80,15 @@ return (0);
  */
 void implement_child_procedure(char **arg_list)
 {
-pid_t child_pid = fork();
+pid_t child_pid = fork();/*Create new process by dup existing process.*/
 int status;
 
 if (child_pid == -1)
 {
-handle_error("fork");
+handle_error("fork");/*If fork() failed, print an error message and return.*/
 return;
 }
-else if (child_pid == 0)
+else if (child_pid == 0)/*This block is executed by the child process*/
 {
 if (arg_list[0][0] == '/')
 {
@@ -101,21 +101,21 @@ char *command = arg_list[0];
 char *path_token;
 char command_path[1024];
 size_t path_len, command_len;
-
+/*Loop through each path entry in the PATH variable.*/
 while ((path_token = strtok(path_env, ":")) != NULL)
 {
 path_len = convention_strlen(path_token);
 command_len = convention_strlen(command);
-/* Construct the full path of the command */
-my_memcpy(command_path, path_token, path_len);
-command_path[path_len] = '/';
+my_memcpy(command_path, path_token, path_len);/*Copy cmd to cmd_path.*/
+command_path[path_len] = '/';/*Add null terminator end of cmd_path.*/
 my_memcpy(command_path + path_len + 1, command, command_len);
+/* Add null terminator end of the command_path.*/
 command_path[path_len + command_len + 1] = '\0';
-
+/*Attempt to exec program using constructed command_path & args.*/
 execve(command_path, arg_list, environ);
 path_env = NULL;  /* Reset path_env for subsequent calls to strtok */
 }
-}
+} /*If execve() failed, print err  msg & exit child process with fail status.*/
 handle_error("execve");
 exit(EXIT_FAILURE);
 }
